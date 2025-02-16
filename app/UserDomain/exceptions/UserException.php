@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UserDomain\Exceptions;
+namespace App\UserDomain\exceptions;
 
 class UserException extends \Exception
 {
@@ -12,5 +12,10 @@ class UserException extends \Exception
     public static function passwordNotMatch(): UserException
     {
         return new self("Password not match");
+    }
+
+    public static function invalidCredentials(): UserException
+    {
+        return new self("Invalid credentials");
     }
 }

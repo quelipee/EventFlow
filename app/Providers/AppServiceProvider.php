@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\EventDomain\contracts\EventContract;
+use App\EventDomain\services\EventService;
 use App\UserDomain\contracts\UserAccountContract;
 use App\UserDomain\services\UserService;
 use Illuminate\Support\ServiceProvider;
@@ -15,6 +17,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(UserAccountContract::class, function ($app) {
             return new UserService();
+        });
+
+        $this->app->bind(EventContract::class, function ($app) {
+            return new EventService();
         });
     }
 

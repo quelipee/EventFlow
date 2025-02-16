@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 // use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -35,6 +36,18 @@ class ExampleTest extends TestCase
 
     public function test_user_can_login()
     {
-
+        User::factory()->create([
+            'email' => 'felipe.mateus@gmail.com',
+            'password' => '123456',
+        ]);
+        $user = [
+          'email' => 'felipe.mateus@gmail.com',
+          'password' => '123456',
+        ];
+        $response = $this->post('api/signIn', $user);
+        $response->assertStatus(ResponseAlias::HTTP_OK);
+        $this->assertDatabaseHas('users', [
+            'email' => 'felipe.mateus@gmail.com',
+        ]);
     }
 }

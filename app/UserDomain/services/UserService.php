@@ -4,8 +4,10 @@ namespace App\UserDomain\services;
 
 use App\Models\User;
 use App\UserDomain\contracts\UserAccountContract;
+use App\UserDomain\dto\signIn;
 use App\UserDomain\dto\signUp;
-use App\UserDomain\Exceptions\UserException;
+use App\UserDomain\exceptions\UserException;
+use Illuminate\Support\Facades\Auth;
 
 class UserService implements UserAccountContract
 {
@@ -47,5 +49,18 @@ class UserService implements UserAccountContract
         if ($password != $passwordRepeat) {
             throw UserException::passwordNotMatch();
         }
+    }
+
+    /**
+     * @throws UserException
+     */
+    public function serviceSignIn(signIn $signIn) : string
+    {
+        if (!Auth::attempt(['email' => $signIn->email, 'password' => $signIn->password])) {
+            throw UserException::invalidCredentials();
+        }
+
+        $user = Auth::user();
+        return $user->createToken('auth token')->plainTextToken;
     }
 }

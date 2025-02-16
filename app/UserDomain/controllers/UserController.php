@@ -3,10 +3,14 @@
 namespace App\UserDomain\controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\UserDomain\contracts\UserAccountContract;
+use App\UserDomain\dto\signIn;
 use App\UserDomain\dto\signUp;
+use App\UserDomain\requests\SignInRequest;
 use App\UserDomain\requests\UserRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class UserController extends Controller
@@ -22,5 +26,17 @@ class UserController extends Controller
             'message' => 'User registered successfully',
             'data' => $user_created
         ], ResponseAlias::HTTP_CREATED);
+    }
+
+    public function UserLogin(SignInRequest $request): JsonResponse
+    {
+        $user_token = $this->userAccount->serviceSignIn(signIn::fromValidatedRequest($request));
+        return response()->json([
+            'message' => 'User logged in successfully',
+            'data' => [
+                'user' => User::find(Auth::id()),
+                'token' => $user_token
+            ]
+        ]);
     }
 }
