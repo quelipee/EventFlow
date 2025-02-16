@@ -18,8 +18,13 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
+        $eventStart = Carbon::instance($this->faker->dateTimeBetween('now', '+1 year'));
+        $eventEnd = Carbon::instance($this->faker->dateTimeBetween($eventStart->copy()->addMinutes(1), $eventStart->copy()->addDays(7)));
+
         return [
-            'description' => $this->faker->realText(),
+            'description' => $this->faker->realText(100),
+            'eventStart' => $eventStart,
+            'eventEnd' => $eventEnd,
         ];
     }
 }

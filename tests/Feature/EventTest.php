@@ -57,4 +57,12 @@ class EventTest extends TestCase
             'id' => $eventId,
         ]);
     }
+
+    public function test_user_can_list_events()
+    {
+        Event::factory(10)->create();
+        Sanctum::actingAs(User::factory()->create());
+        $response = $this->get('api/event');
+        $response->assertStatus(ResponseAlias::HTTP_OK);
+    }
 }

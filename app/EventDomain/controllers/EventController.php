@@ -42,4 +42,14 @@ class EventController extends Controller
             'data' => null,
         ], ResponseAlias::HTTP_NO_CONTENT);
     }
+
+    public function listEvents(): JsonResponse
+    {
+        $all_event = $this->contract->allEvent();
+        dd($all_event->toArray());
+        return response()->json([
+            'message' => 'Event list.',
+            'data' => $all_event,
+        ],ResponseAlias::HTTP_OK);
+    }
 }

@@ -7,6 +7,7 @@ use App\EventDomain\dto\eventDTO;
 use App\EventDomain\exceptions\EventException;
 use App\Models\Event;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 
 class EventService implements EventContract
 {
@@ -64,5 +65,10 @@ class EventService implements EventContract
     {
         $event = Event::query()->findOrFail($eventId);
         return $event->delete();
+    }
+
+    public function allEvent(): Collection
+    {
+        return Event::all();
     }
 }
