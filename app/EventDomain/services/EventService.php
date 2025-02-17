@@ -6,35 +6,23 @@ use App\EventDomain\contracts\EventContract;
 use App\EventDomain\dto\eventDTO;
 use App\EventDomain\exceptions\EventException;
 use App\Models\Event;
-use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class EventService implements EventContract
 {
-    /**
-     * @throws EventException
-     */
     public function addEvent(eventDTO $eventDTO) : Event
     {
-        $this->isEventTimeConflict($eventDTO->eventStart);
-
-        return Event::create([
+        $event_new =  new Event([
             'description' => $eventDTO->description,
             'eventStart' => $eventDTO->eventStart,
             'eventEnd' => $eventDTO->eventEnd,
         ]);
-    }
+        $event_new->user()->associate(Auth::user());
+        $event_new->save();
 
-    /**
-     * @throws EventException
-     */
-    private function isEventTimeConflict (Carbon $eventStart): void
-    {
-        //TODO PENSANDO MELHOR COMO VAI FUNCIONAR SE VAI TER UM TEMPO DE DIFERENÇA ENTRA OS EVENTOS
-        $event_exist = Event::query()->where(['eventStart' => $eventStart])->exists();
-        if ($event_exist) {
-            throw EventException::EventTimeConflictException();
-        }
+        return $event_new;
     }
 
     /**
@@ -69,6 +57,6 @@ class EventService implements EventContract
 
     public function allEvent(): Collection
     {
-        return Event::all();
+        return Event::query()->where('user_id', Auth::id())->get();
     }
 }

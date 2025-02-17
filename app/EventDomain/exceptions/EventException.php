@@ -13,4 +13,9 @@ class EventException extends \Exception
     {
         return new self("Event Not Found");
     }
+
+    public static function UnauthorizedEventEditException(object|string|null $eventId): EventException
+    {
+        return new self("Unauthorized event id: {$eventId}");
+    }
 }

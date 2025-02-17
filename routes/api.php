@@ -14,9 +14,11 @@ Route::middleware('guest:sanctum')->group(function () {
     Route::post('signIn', [UserController::class, 'UserLogin'])->name('signIn');
 });
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum','duplicatedEvent'])->group(function () {
     Route::post('event/create', [EventController::class, 'createEvent'])->name('createEvent');
-    Route::put('event/edit/{id}', [EventController::class, 'updateEvent'])->name('updateEvent');
+    Route::put('event/edit/{id}', [EventController::class, 'updateEvent'])
+        ->middleware('EnsureUserOwnsEvent')
+        ->name('updateEvent');
     Route::delete('event/delete/{id}', [EventController::class, 'deleteEvent'])->name('deleteEvent');
     Route::get('event/', [EventController::class, 'listEvents'])->name('listEvents');
 });
