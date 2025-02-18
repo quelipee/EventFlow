@@ -15,6 +15,7 @@ class EventService implements EventContract
     public function addEvent(eventDTO $eventDTO) : Event
     {
         $event_new =  new Event([
+            'title' => $eventDTO->title,
             'description' => $eventDTO->description,
             'eventStart' => $eventDTO->eventStart,
             'eventEnd' => $eventDTO->eventEnd,

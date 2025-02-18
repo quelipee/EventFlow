@@ -22,6 +22,7 @@ class EventFactory extends Factory
         $eventEnd = Carbon::instance($this->faker->dateTimeBetween($eventStart->copy()->addMinutes(1), $eventStart->copy()->addDays(7)));
 
         return [
+            'title' => $this->faker->title,
             'description' => $this->faker->realText(100),
             'eventStart' => $eventStart,
             'eventEnd' => $eventEnd,

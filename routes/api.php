@@ -20,5 +20,5 @@ Route::middleware(['auth:sanctum','duplicatedEvent'])->group(function () {
         ->middleware('EnsureUserOwnsEvent')
         ->name('updateEvent');
     Route::delete('event/delete/{id}', [EventController::class, 'deleteEvent'])->name('deleteEvent');
-    Route::get('event/', [EventController::class, 'listEvents'])->name('listEvents');
+    Route::get('event', [EventController::class, 'listEvents'])->name('listEvents');
 });

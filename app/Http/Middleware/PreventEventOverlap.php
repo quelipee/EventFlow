@@ -21,10 +21,17 @@ class PreventEventOverlap
         /*
          * ESTA FUNCAO VERIFICA ANTES DE CRIAR UM EVENTO, SE ESTA DISPONIVEL O HORARIO, PARA NAO TER CONFLITO
          * */
+        $eventId = $request->route('id');
         $event_exist = Event::query()->where(function ($query) use ($request) {
             $query->whereBetween('eventStart', [$request->eventStart, $request->eventEnd])
                 ->orWhereBetween('eventEnd', [$request->eventStart, $request->eventEnd]);
-        })->exists();
+        })
+        ->where(function ($query) use ($eventId){
+            if($eventId){
+                $query->where('id','!=', $eventId);
+            }
+        })
+        ->exists();
         if ($event_exist) {
             throw EventException::EventTimeConflictException();
         }
