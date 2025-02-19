@@ -2,7 +2,7 @@
 
 ## 📌 Sobre o Projeto
 
-O **EventFlow** é uma aplicação web para gerenciamento de eventos, permitindo que usuários criem, editem e excluam eventos de forma intuitiva. A plataforma oferece um calendário interativo e funcionalidades para controle de eventos com **notificações**, **filtros** e **controle de status**.
+O **EventFlow** é uma aplicação web para gerenciamento de eventos, permitindo que usuários criem, editem e excluam eventos de forma intuitiva. A plataforma oferece um calendário interativo e funcionalidades para controle de eventos.
 
 ## 🚀 Tecnologias Utilizadas
 
