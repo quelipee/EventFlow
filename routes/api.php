@@ -10,11 +10,12 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::middleware('guest:sanctum')->group(function () {
-    Route::post('signUp', [UserController::class, 'UserRegister'])->name('signUp');
-    Route::post('signIn', [UserController::class, 'UserLogin'])->name('signIn');
+    Route::post('signUp', [UserController::class, 'userRegister'])->name('signUp');
+    Route::post('signIn', [UserController::class, 'userLogin'])->name('signIn');
 });
 
 Route::middleware(['auth:sanctum','duplicatedEvent'])->group(function () {
+    Route::post('signOut', [UserController::class, 'userLogout'])->name('signOut');
     Route::post('event/create', [EventController::class, 'createEvent'])->name('createEvent');
     Route::put('event/edit/{id}', [EventController::class, 'updateEvent'])
         ->middleware('EnsureUserOwnsEvent')

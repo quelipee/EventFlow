@@ -63,4 +63,17 @@ class UserService implements UserAccountContract
         $user = Auth::user();
         return $user->createToken('auth token')->plainTextToken;
     }
+
+    /**
+     * @throws UserException
+     */
+    public function invalidateSession(): bool
+    {
+        if (!Auth::check()){
+            throw UserException::UserNotFoundException();
+        }
+        $user = Auth::user();
+        $user->tokens()->delete();
+        return true;
+    }
 }

@@ -10,4 +10,6 @@ interface UserAccountContract
 {
     public function serviceSignUp(signUp $signUp) : User;
     public function serviceSignIn(signIn $signIn) : string;
+
+    public function invalidateSession() : bool;
 }

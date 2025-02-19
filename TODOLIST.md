@@ -12,7 +12,7 @@
 - [X] Não deixar sobrescrever eventos e emitir alerta caso ocorra
 - [x] Suporte a vários usuários
 - [x] Eventos ligados ao usuário que os criou
-- [ ] Frontend renderizado no lado do cliente
+- [x] Frontend renderizado no lado do cliente
 
 ## ⭐ Diferenciais (Opcionais, mas agregam valor)
 - [x] Eventos com duração de mais de um dia

@@ -5,6 +5,7 @@ namespace App\EventDomain\services;
 use App\EventDomain\contracts\EventContract;
 use App\EventDomain\dto\eventDTO;
 use App\EventDomain\exceptions\EventException;
+use App\Jobs\DeleteExpiredEventsJob;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;

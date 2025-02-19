@@ -6,16 +6,21 @@ class UserException extends \Exception
 {
     public static function emailAlreadyExists(): UserException
     {
-        return new self("User email already exists");
+        return new self("Email indisponivel");
     }
 
     public static function passwordNotMatch(): UserException
     {
-        return new self("Password not match");
+        return new self("Senhas diferentes");
     }
 
     public static function invalidCredentials(): UserException
     {
-        return new self("Invalid credentials");
+        return new self("Informações invalidas");
+    }
+
+    public static function UserNotFoundException(): UserException
+    {
+        return new self("Usuario não encontrado");
     }
 }

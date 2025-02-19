@@ -19,7 +19,7 @@ class UserController extends Controller
         protected UserAccountContract $userAccount
     ){}
 
-    public function UserRegister(UserRequest $request): JsonResponse
+    public function userRegister(UserRequest $request): JsonResponse
     {
         $user_created = $this->userAccount->serviceSignUp(signUp::fromValidatedRequest($request));
         return response()->json([
@@ -28,7 +28,7 @@ class UserController extends Controller
         ], ResponseAlias::HTTP_CREATED);
     }
 
-    public function UserLogin(SignInRequest $request): JsonResponse
+    public function userLogin(SignInRequest $request): JsonResponse
     {
         $user_token = $this->userAccount->serviceSignIn(signIn::fromValidatedRequest($request));
         return response()->json([
@@ -38,5 +38,14 @@ class UserController extends Controller
                 'token' => $user_token
             ]
         ]);
+    }
+
+    public function userLogout()
+    {
+        $session = $this->userAccount->invalidateSession();
+        return response()->json([
+            'message' => 'User logged out successfully',
+            'data' => $session
+        ], ResponseAlias::HTTP_OK);
     }
 }

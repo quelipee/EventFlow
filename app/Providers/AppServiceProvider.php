@@ -4,8 +4,14 @@ namespace App\Providers;
 
 use App\EventDomain\contracts\EventContract;
 use App\EventDomain\services\EventService;
+use App\Events\EventExpired;
+use App\Jobs\DeleteExpiredEventsJob;
+use App\Listeners\DeleteExpiredEventListener;
+use App\Models\Event;
+use App\Observers\EventObserver;
 use App\UserDomain\contracts\UserAccountContract;
 use App\UserDomain\services\UserService;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $schedule = app(Schedule::class);
+        $schedule->job(new DeleteExpiredEventsJob())->everyMinute();
     }
 }
