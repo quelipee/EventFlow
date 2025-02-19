@@ -58,10 +58,13 @@
               type="checkbox"
               id="terms"
               class="mr-2"
-              v-model="termsAccepted"
               required
             />
             <label for="terms" class="text-sm text-gray-600">Aceito os termos e condições</label>
+          </div>
+
+          <div class="mb-3" v-if="errorLogin">
+            <p class="text-red-400 text-sm text-center">{{errorLogin}}</p>
           </div>
 
           <div class="p-1">
@@ -76,7 +79,7 @@
           <div class="text-center">
             <p class="text-sm text-gray-600">
               Já tem uma conta?
-              <a href="/login" class="text-indigo-600 hover:underline">Faça login</a>
+              <a href="/" class="text-indigo-600 hover:underline">Faça login</a>
             </p>
           </div>
         </form>
@@ -87,7 +90,7 @@
   <script setup lang="ts">
   import type {User} from "@/interfaces/type.ts";
   import {ref} from "vue";
-  import {signUpAuthenticated} from "@/services/eventService.ts";
+  import {signInAuthenticated, signUpAuthenticated} from "@/services/eventService.ts";
   import router from "@/router";
 
   const user = ref<User>({
@@ -96,18 +99,21 @@
     password: '',
     passwordRepeat: ''
   });
-
+  const errorLogin = ref(null);
+  const clearError = () =>{
+    errorLogin.value = null;
+  };
   const submitForm = async () => {
 
-    await signUpAuthenticated(user.value).then((response) => {
-      router.replace('/homepage');
+    await signUpAuthenticated(user.value).then(async (response) => {
+      await signInAuthenticated(user.value);
+      await router.replace('/homepage');
       console.log(response);
     }).catch((err) => {
-      console.log(err);
+      errorLogin.value = err.response.data.message;
+      setTimeout(() => {
+        clearError();
+      },5000)
     })
   }
   </script>
-
-  <style scoped>
-  /* Adicione seus estilos personalizados aqui, se necessário */
-  </style>

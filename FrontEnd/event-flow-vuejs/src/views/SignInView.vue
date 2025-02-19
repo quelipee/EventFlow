@@ -27,6 +27,10 @@
           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Enter your password">
         </div>
 
+        <div class="mb-3" v-if="errorLogin">
+          <p class="text-red-400 text-sm text-center">{{errorLogin}}</p>
+        </div>
+
         <div class="flex justify-between items-center mb-4">
           <label class="flex items-center text-sm text-gray-600">
             <input type="checkbox" class="mr-2"> Lembrar-me
@@ -41,19 +45,10 @@
 
       <div class="flex items-center my-6">
         <div class="flex-1 border-t"></div>
-        <p class="px-4 text-gray-500 text-sm">Ou continue com</p>
+        <p
+          class="px-4 text-gray-700 text-sm font-semibold
+          hover:text-gray-400"><router-link to="/register">Criar Conta</router-link></p>
         <div class="flex-1 border-t"></div>
-      </div>
-
-      <div class="flex gap-4">
-        <button class="flex-1 flex items-center justify-center border px-4 py-2 rounded-lg hover:bg-gray-100">
-          <img src="https://www.pngmart.com/files/16/Google-Logo-PNG-Image.png" class="w-5 h-5 mr-3">
-          <p class="p-1 text-sm">Google</p>
-        </button>
-        <button class="flex-1 flex items-center justify-center border px-4 py-2 rounded-lg hover:bg-gray-100">
-          <img src="https://pngimg.com/uploads/github/github_PNG80.png" class="w-5 h-5 mr-2">
-          <p class="p-1 text-sm">GitHub</p>
-        </button>
       </div>
     </div>
 
@@ -70,6 +65,10 @@ import router from '@/router';
 import { ref } from 'vue';
 import {signInAuthenticated} from "@/services/eventService.ts";
 
+const errorLogin = ref(null);
+const clearError = () =>{
+  errorLogin.value = null;
+};
 const user = ref<User>({
     email: '',
     password: '',
@@ -80,7 +79,10 @@ const checkForm = async () => {
         router.replace('/homepage');
         console.log(response);
     }).catch((err) => {
-        console.log(err);
+        errorLogin.value = err.response.data.message;
+        setTimeout(() => {
+          clearError();
+        },5000)
     })
 }
 </script>

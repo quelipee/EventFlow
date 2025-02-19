@@ -10,8 +10,9 @@ export interface EventStore {
   created_at: Date,
   updated_at: Date,
   description: string,
-  eventEnd: Date,
-  eventStart: Date,
+  eventEnd: string | Date,
+  eventStart: string | Date,
   id: number,
-  user_id: number
+  user_id: number,
+  status: string
 }

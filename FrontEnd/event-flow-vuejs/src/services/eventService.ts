@@ -94,3 +94,9 @@ export const destroyEventDelete = async (eventId : number) => {
   console.log(response.data);
   return response.data;
 }
+
+export const logoutUserEvent = async () => {
+  const response = await apiAuth.post('signOut');
+  localStorage.removeItem('token');
+  console.log(response);
+};

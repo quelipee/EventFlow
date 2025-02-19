@@ -1,16 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50 flex flex-col items-center">
 
-    <header class="w-full bg-indigo-600 text-white p-4">
-      <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Adicionar Evento</h1>
-        <button
-          @click="homepage"
-          class="bg-white text-indigo-600 py-2 px-4 rounded-lg hover:bg-gray-100">
-          Voltar
-        </button>
-      </div>
-    </header>
+    <HeaderBackHome/>
 
     <main class="w-full max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-lg mt-6">
       <h2 class="text-xl font-semibold text-indigo-600 mb-4">Novo Evento</h2>
@@ -52,9 +43,10 @@
 </template>
 
 <script lang="ts" setup>
+import HeaderBackHome from "@/components/HeaderBackHome.vue";
 import router from "@/router/index.js";
 import {ref} from "vue";
-import {EventStore} from "@/interfaces/type.ts";
+import type {EventStore} from "@/interfaces/type.ts";
 import {addEventPost} from "@/services/eventService.ts";
 
 const event = ref<EventStore>({

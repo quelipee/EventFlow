@@ -1,17 +1,6 @@
 <template>
     <div class="min-h-screen bg-gray-50 flex flex-col items-center">
-      <header class="w-full bg-indigo-600 text-white p-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 class="text-2xl font-bold">Editar Evento</h1>
-          <div>
-            <button
-              @click="homepage"
-              class="bg-white text-indigo-600 py-2 px-4 rounded-lg hover:bg-gray-100">
-              Voltar
-            </button>
-          </div>
-        </div>
-      </header>
+      <HeaderBackHome/>
 
       <main v-show="loading" class="w-full max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-6">
         <h2 class="text-xl font-semibold text-gray-700 mb-4">Editar Evento</h2>
@@ -52,10 +41,11 @@
   </template>
 
   <script lang="ts" setup>
+  import HeaderBackHome from "@/components/HeaderBackHome.vue";
   import { ref, onMounted } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import {eventStore} from "@/stores/eventStore.js";
-  import {EventStore} from "@/interfaces/type.js";
+  import type {EventStore} from "@/interfaces/type.ts";
   import {editEventPut} from "@/services/eventService.ts";
 
   const route = useRoute();
@@ -97,9 +87,6 @@
         clearError();
       },5000);
     });
-  }
-  const homepage = () => {
-    router.replace('/homepage')
   }
   </script>
 

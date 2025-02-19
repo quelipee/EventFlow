@@ -1,52 +1,37 @@
 <template>
   <div class="min-h-screen bg-gray-50 flex flex-col items-center">
-
-    <header class="w-full bg-indigo-600 text-white p-4">
-      <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Dashboard</h1>
-        <div>
-          <button class="bg-white text-indigo-600 py-2 px-4 rounded-lg hover:bg-gray-100">
-            Log out
-          </button>
-        </div>
-      </div>
-    </header>
-
+    <Header/>
     <!-- Main Content -->
     <main class="w-full max-w-7xl mx-auto p-4">
-      <div class="flex items-center justify-end p-2">
-        <button
-          @click="addEvent"
-          class="bg-gray-400 py-1 px-3 rounded-md
-          shadow-2xl text-white font-semibold hover:bg-gray-600">Novo Evento</button>
-      </div>
-      <!-- Events Grid (Cards) -->
-      <div
-        v-for="event in eventComputed"
-        :key="event.id"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-1">
-        <!-- Event Card -->
-        <div class="bg-white p-6 rounded-lg shadow-lg">
+
+      <NewEvent @click="addEvent"/>
+
+      <div class="grid grid-rows-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-1">
+        <div
+          v-for="event in sortedEvents"
+          :key="event.id"
+          class="bg-white p-6 rounded-xl shadow-lg">
+
           <div class="flex justify-between">
             <h3 class="text-xl font-semibold text-indigo-600">{{ event.title }}</h3>
-            <p class="text-sm bg-gray-400 border rounded-full px-3 py-1 text-white font-semibold">
+            <p class="text-sm bg-gray-300 border border-gray-400 rounded-md px-3 py-1 text-gray-600 font-semibold">
               {{ event.formattedDateStart }} - {{ event.formattedDateEnd }}
             </p>
           </div>
+
           <p class="text-gray-600 mt-2">{{ event.description }}</p>
+
           <div class="mt-4 flex justify-between items-center">
-            <div>
-              <span class="bg-blue-500 text-white py-1 px-3 rounded-full text-xs">{{ event.eventStart.slice(11) }}</span>
-              <span class="bg-green-500 ml-2 text-white py-1 px-3 rounded-full text-xs">{{ event.eventEnd.slice(11) }}</span>
-            </div>
+              <span class="bg-blue-400 text-white py-1 px-3 rounded-md font-bold text-xs">DURAÇÃO : {{ event.eventStart.slice(11) }} - {{ event.eventEnd.slice(11) }}</span>
             <div class="flex flex-col space-y-2">
-              <button @click="editEvent(event)" class="hover:bg-green-800 ml-2 bg-green-500 text-white py-1 px-3 rounded-full text-xs">EDITAR</button>
-              <button @click="deleteEvent(event.id)" class="hover:bg-red-800 ml-2 bg-red-500 text-white py-1 px-3 rounded-full text-xs">DELETAR</button>
+              <button @click="editEvent(event)" class="hover:bg-green-800 ml-2 bg-green-500 text-white py-1 px-3 rounded-md text-xs">EDITAR</button>
+              <button @click="deleteEvent(event.id)" class="hover:bg-red-800 ml-2 bg-red-500 text-white py-1 px-3 rounded-md text-xs">DELETAR</button>
             </div>
           </div>
-        </div>
 
+        </div>
       </div>
+
     </main>
   </div>
 
@@ -65,14 +50,17 @@
 </template>
 
 <script lang="ts" setup>
+import NewEvent from "@/components/NewEvent.vue";
 import {eventStore} from "@/stores/eventStore.js";
+import Header from "@/components/Header.vue";
 import {computed, onMounted} from "vue";
 import router from "@/router";
 import {destroyEventDelete} from "@/services/eventService.ts";
 import {ref} from "vue";
+import type {EventStore} from "@/interfaces/type.ts";
 
 const showModal = ref(false);
-const eventToDelete = ref(null);
+const eventToDelete = ref();
 
 const storeEvent = eventStore();
 onMounted(async () => {
@@ -81,17 +69,8 @@ onMounted(async () => {
      console.log(typeof(evt.eventStart));
    });
 });
-const eventComputed = computed(() => {
-  return storeEvent.event.map(evt =>{
-    return {
-      ...evt,
-      formattedDateStart: new Intl.DateTimeFormat('pt-BR').format(new Date(evt.eventStart)),
-      formattedDateEnd: new Intl.DateTimeFormat('pt-BR').format(new Date(evt.eventEnd))
-    }
-  });
-});
 
-const editEvent = (event) => {
+const editEvent = (event : EventStore) => {
     router.replace({
     name: 'editEvent',
     params: {
@@ -118,5 +97,15 @@ const cancelDelete = () => {
 const addEvent = () => {
   router.replace('/newEvent');
 }
+const sortedEvents = computed(() => {
+  return [...storeEvent.event].sort((a,b) =>
+    new Date(a.eventStart).getTime() - new Date(b.eventStart).getTime()).map(evt => ({
+    ...evt,
+    formattedDateStart: new Intl.DateTimeFormat('pt-BR').format(new Date(evt.eventStart)),
+    formattedDateEnd: new Intl.DateTimeFormat('pt-BR').format(new Date(evt.eventEnd))
+  })).filter(evt =>
+    evt.status != 'INATIVO'
+  );
+});
 
 </script>
