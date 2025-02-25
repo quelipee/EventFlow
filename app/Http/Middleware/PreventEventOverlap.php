@@ -6,6 +6,7 @@ use App\EventDomain\exceptions\EventException;
 use App\Models\Event;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class PreventEventOverlap
@@ -26,9 +27,10 @@ class PreventEventOverlap
             $query->whereBetween('eventStart', [$request->eventStart, $request->eventEnd])
                 ->orWhereBetween('eventEnd', [$request->eventStart, $request->eventEnd]);
         })
+        ->where('user_id', Auth::id())
         ->where(function ($query) use ($eventId){
             if($eventId){
-                $query->where('id','!=', $eventId);
+                $query->where('id','<>', $eventId);
             }
         })
         ->exists();
