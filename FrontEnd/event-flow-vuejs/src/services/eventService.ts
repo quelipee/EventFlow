@@ -70,7 +70,7 @@ export const getAllEvent = async () => {
 }
 
 export const addEventPost = async (event : EventStore) => {
-  const response = await apiAuth.post('event/create', {
+  const response = await apiAuth.post('event', {
     title: event.title,
     description: event.description,
     eventStart: event.eventStart,
@@ -80,7 +80,7 @@ export const addEventPost = async (event : EventStore) => {
 }
 
 export const editEventPut = async (event : EventStore) => {
-  const response = await apiAuth.put('event/edit/'+ event.id ,{
+  const response = await apiAuth.put('event/'+ event.id ,{
     title: event.title,
     description: event.description,
     eventStart: event.eventStart,
@@ -90,7 +90,7 @@ export const editEventPut = async (event : EventStore) => {
 }
 
 export const destroyEventDelete = async (eventId : number) => {
-  const response = await apiAuth.delete('event/delete/' + eventId);
+  const response = await apiAuth.delete('event/' + eventId);
   console.log(response.data);
   return response.data;
 }

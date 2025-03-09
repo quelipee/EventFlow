@@ -5,18 +5,19 @@ namespace App\Models;
 use App\EventDomain\TypeStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Event extends Model
 {
     use HasFactory;
     protected $table = 'events';
     protected $fillable = [
+        'id',
         'title',
         'description',
         'eventStart',
         'eventEnd',
-        'user_id',
+//        'user_id',
         'status'
     ];
 
@@ -30,8 +31,8 @@ class Event extends Model
         'status' => TypeStatus::ACTIVE
     ];
 
-    public function user(): BelongsTo
+    public function user(): BelongsToMany
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class,'user_invite','event_id','user_id');
     }
 }

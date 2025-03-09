@@ -8,6 +8,7 @@ use App\EventDomain\exceptions\EventException;
 use App\Jobs\DeleteExpiredEventsJob;
 use App\Models\Event;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,8 +22,8 @@ class EventService implements EventContract
             'eventStart' => $eventDTO->eventStart,
             'eventEnd' => $eventDTO->eventEnd,
         ]);
-        $event_new->user()->associate(Auth::user());
         $event_new->save();
+        $event_new->user()->attach(Auth::id());
 
         return $event_new;
     }
@@ -59,6 +60,7 @@ class EventService implements EventContract
 
     public function allEvent(): Collection
     {
-        return Event::query()->where('user_id', Auth::id())->get();
+        return Event::whereHas('user', fn (Builder $query) =>
+        $query->where('user_id',Auth::id()))->get();
     }
 }

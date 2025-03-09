@@ -41,7 +41,7 @@
   </template>
 
   <script lang="ts" setup>
-  import HeaderBackHome from "@/components/HeaderBackHome.vue";
+  import HeaderBackHome from "@/components/headers/HeaderBackHome.vue";
   import { ref, onMounted } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import {eventStore} from "@/stores/eventStore.js";

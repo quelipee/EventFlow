@@ -20,9 +20,9 @@ class EnsureUserOwnsEvent
     public function handle(Request $request, Closure $next): Response
     {
         $eventId = $request->route()->parameter('id');
-        $user_eventID = Event::find($eventId);
-        $user_exist = Auth::user()->events()->where('user_id', $user_eventID->user_id)->exists();
-        if (!$user_exist) {
+        $eventUserFind = Auth::user()->events()->where('event_id', $eventId)->exists();
+
+        if (!$eventUserFind) {
             throw EventException::UnauthorizedEventEditException($eventId);
         }
 

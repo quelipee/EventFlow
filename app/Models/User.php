@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -49,8 +50,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function events(): HasMany
+    public function events(): BelongsToMany
     {
-        return $this->hasMany(Event::class);
+        return $this->belongsToMany(Event::class, 'user_invite', 'user_id', 'event_id');
     }
 }

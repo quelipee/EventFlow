@@ -1,35 +1,23 @@
 <template>
   <div class="min-h-screen bg-gray-50 flex flex-col items-center">
     <Header/>
-    <!-- Main Content -->
     <main class="w-full max-w-7xl mx-auto p-4">
 
       <NewEvent @click="addEvent"/>
 
       <div class="grid grid-rows-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-1">
-        <div
-          v-for="event in sortedEvents"
-          :key="event.id"
-          class="bg-white p-6 rounded-xl shadow-lg">
-
-          <div class="flex justify-between">
-            <h3 class="text-xl font-semibold text-indigo-600">{{ event.title }}</h3>
-            <p class="text-sm bg-gray-300 border border-gray-400 rounded-md px-3 py-1 text-gray-600 font-semibold">
-              {{ event.formattedDateStart }} - {{ event.formattedDateEnd }}
-            </p>
-          </div>
-
-          <p class="text-gray-600 mt-2">{{ event.description }}</p>
-
-          <div class="mt-4 flex justify-between items-center">
-              <span class="bg-blue-400 text-white py-1 px-3 rounded-md font-bold text-xs">DURAÇÃO : {{ event.eventStart.slice(11) }} - {{ event.eventEnd.slice(11) }}</span>
-            <div class="flex flex-col space-y-2">
-              <button @click="editEvent(event)" class="hover:bg-green-800 ml-2 bg-green-500 text-white py-1 px-3 rounded-md text-xs">EDITAR</button>
-              <button @click="deleteEvent(event.id)" class="hover:bg-red-800 ml-2 bg-red-500 text-white py-1 px-3 rounded-md text-xs">DELETAR</button>
-            </div>
-          </div>
-
-        </div>
+        <Events v-for="event in sortedEvents"
+                :key="event.id"
+                :id="event.id"
+                :title="event.title"
+                :description="event.description"
+                :eventStart="event.formattedDateStart"
+                :eventEnd="event.formattedDateEnd"
+                :eventStartTime="event.eventStart"
+                :eventEndTime="event.eventEnd"
+                @editEvent="editEvent"
+                @deleteEvent="deleteEvent"
+        />
       </div>
 
     </main>
@@ -50,14 +38,15 @@
 </template>
 
 <script lang="ts" setup>
-import NewEvent from "@/components/NewEvent.vue";
+import NewEvent from "@/components/event/NewEvent.vue";
 import {eventStore} from "@/stores/eventStore.js";
-import Header from "@/components/Header.vue";
+import Header from "@/components/headers/Header.vue";
 import {computed, onMounted} from "vue";
 import router from "@/router";
 import {destroyEventDelete} from "@/services/eventService.ts";
 import {ref} from "vue";
 import type {EventStore} from "@/interfaces/type.ts";
+import Events from "@/components/event/Events.vue";
 
 const showModal = ref(false);
 const eventToDelete = ref();

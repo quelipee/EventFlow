@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import HeaderBackHome from "@/components/HeaderBackHome.vue";
+import HeaderBackHome from "@/components/headers/HeaderBackHome.vue";
 import router from "@/router/index.js";
 import {ref} from "vue";
 import type {EventStore} from "@/interfaces/type.ts";
